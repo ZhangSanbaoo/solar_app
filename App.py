@@ -1,21 +1,7 @@
 import tkinter as tk
 from time import strftime
 
-def update_time():
-    current_time = strftime("%H:%M:%S")
-    time_label.config(text=current_time)
-    time_label.after(1000, update_time)
 
-def add_item():
-    item = entry.get()
-    if item:
-        listbox.insert(tk.END, item)
-        entry.delete(0, tk.END)
-
-def remove_item():
-    selected_index = listbox.curselection()
-    if selected_index:
-        listbox.delete(selected_index)
 
 root = tk.Tk()
 root.title("App test")
