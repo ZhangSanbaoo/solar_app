@@ -1,31 +1,61 @@
 import tkinter as tk
 from time import strftime
-import random
-from tkinter import font as tkFont
-import pyglet
-pyglet.font.add_file("CascadiaCodePLItalic.ttf")
-pyglet.font.load("CascadiaCodePLItalic.ttf")
-# 创建主窗口
-# root = tk.Tk()
-# root.title("App test")
 
-# # 创建标签用于显示时间
-# phi_label = tk.Label(root, font=("CASCADIA CODE PL", 1), text="")
-# phi_label.pack(padx=400, pady=225) #软件界面的长宽
+def update_time():
+    current_time = strftime("%H:%M:%S")
+    time_label.config(text=current_time)
+    time_label.after(1000, update_time)
 
-# # 更新时间的函数
-# def update_test():
-#     # phi = random.randint(1,10)
-#     phi_label.config(text="phi",font=("CASCADIA CODE PL", 1))  # 更新标签文本
-#     phi_label.after(1000, update_test)  # 每秒更新一次时间
+def add_item():
+    item = entry.get()
+    if item:
+        listbox.insert(tk.END, item)
+        entry.delete(0, tk.END)
 
-# # 初始化并启动时间更新
-# update_test()
-
-# # 运行主循环
-# root.mainloop()
+def remove_item():
+    selected_index = listbox.curselection()
+    if selected_index:
+        listbox.delete(selected_index)
 
 root = tk.Tk()
-available_fonts = tkFont.families()
-print(available_fonts)
-root.destroy()
+root.title("App test")
+root.minsize(750, 400)
+
+# 使用Grid布局管理器
+listbox_frame = tk.Frame(root)
+listbox_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+listbox_label = tk.Label(listbox_frame, text="Items:")
+listbox_label.grid(row=0, column=0, sticky="w")
+
+listbox = tk.Listbox(listbox_frame, width=5, height=20)
+listbox.grid(row=1, column=0, sticky="nsew")
+
+entry = tk.Entry(listbox_frame)
+entry.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+
+add_button = tk.Button(listbox_frame, text="Add Item", command=add_item)
+add_button.grid(row=3, column=0, sticky="ew")
+
+remove_button = tk.Button(listbox_frame, text="Remove Selected", command=remove_item)
+remove_button.grid(row=4, column=0, sticky="ew")
+
+# 设置Grid布局权重，以便随着窗口放大而调整大小
+listbox_frame.columnconfigure(0, weight=1)
+listbox_frame.rowconfigure(1, weight=1)
+
+# 右侧标签显示时间（放在右上角）
+time_label = tk.Label(root, font=("Cascadia Code", 20), text="")
+time_label.grid(row=0, column=1, padx=10, pady=10, sticky="ne")
+
+
+# 设置Grid布局权重，以便随着窗口放大而调整大小
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+root.rowconfigure(0, weight=1)
+
+# 初始化并启动时间更新
+update_time()
+
+# 运行主循环
+root.mainloop()
